@@ -17,14 +17,14 @@ parameterValue <- data.table(expand.grid(
 
 parameterValue[ , Index :=  1:dim(parameterValue)[1]]
 
-write.csv(x = parameterValue, file = "parmaterValue.csv", row.names = FALSE)
+fileFolder = "./simulatedDataSets/"
+
+write.csv(x = parameterValue, file = paste0("parmaterValue.csv"), row.names = FALSE)
 
 ## Simulate datasets
-fileFolder <- "./simulatedDataSets/"
-
 
 ## Number of datasets to simulate
-nSims <- 10
+nSims <- 2000
 
 ## Loop through parameter values 
 for(Idx in parameterValue[ , Index]){
@@ -46,8 +46,9 @@ for(Idx in parameterValue[ , Index]){
     }
     
     print(Idx)
+    ## -1 is needed to convert output to HTCondor's 0-based indexing 
     write.csv(x = simulateData, file = paste0(fileFolder, "simulatedData",
-                                              Idx, ".csv"),
+                                              Idx - 1, ".csv"),
               row.names = FALSE)
     }
 

@@ -1,16 +1,16 @@
 library(rstan)
 
-## will need to capture input index from HTCondor
-## Also, add + 1 
-condorIndex = 2240
+## + 1 needed because condor lives in 0 index work but R lives in 
+condorIndex <- as.numeric(commandArgs(trailingOnly = TRUE)) + 1
 
-inputDataFolder = "./simulatedDataSets/"
-outputDataFolder = "./recoveredData/"
 
 parameterValue <- read.csv("parmaterValue.csv")
 
 K <- parameterValue$K[ parameterValue$Index == condorIndex]
-d <- read.csv(paste0( inputDataFolder, "simulatedData", condorIndex, ".csv"))
+
+
+inFilename <- paste0( "simulatedData", condorIndex -1, ".csv")
+d <- read.csv(inFilename)
 nSims = dim(d)[2] - 1
 
 ## create CSV to save outputs
@@ -70,4 +70,4 @@ for(simIndex in 1:nSims){
     }
 }
 
-write.csv(x = stanSummary, file = paste0(outputDataFolder, "stanSummary_", condorIndex, ".csv"), row.names = FALSE)
+write.csv(x = stanSummary, file = "stanSummary.csv", row.names = FALSE)
