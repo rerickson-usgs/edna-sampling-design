@@ -1,4 +1,10 @@
 library(data.table)
+library(foreach)
+library(doMC)
+library(parallel)
+
+registerDoMC(40)
+
 
 ## Generate all possible parameter combinations
 K_in        <- c( 2, 4, 8, 16)
@@ -27,7 +33,8 @@ write.csv(x = parameterValue, file = paste0("parmaterValue.csv"), row.names = FA
 nSims <- 2000
 
 ## Loop through parameter values 
-for(Idx in parameterValue[ , Index]){
+##for(Idx in parameterValue[ , Index]){
+foreach(Idx = 1:parameterValue[ , max(Index)]) %dopar% {
     psi      = parameterValue[ Index == Idx, psi]
     theta    = parameterValue[ Index == Idx, theta]
     p        = parameterValue[ Index == Idx, p]
@@ -45,7 +52,7 @@ for(Idx in parameterValue[ , Index]){
         simulateData[ , eval(simName) := Ysim]
     }
     
-    print(Idx)
+    ##    print(Idx)
     ## -1 is needed to convert output to HTCondor's 0-based indexing 
     write.csv(x = simulateData, file = paste0(fileFolder, "simulatedData",
                                               Idx - 1, ".csv"),
