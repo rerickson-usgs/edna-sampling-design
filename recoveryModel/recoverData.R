@@ -53,7 +53,7 @@ for(simIndex in 1:nSims){
             pID = rep(1 , nObs),
             K = K
         )
-        stanOut <- stan(file = 'modelWorksPdetect.Stan', data = stanData, chains = 3, iter = 8000)
+        stanOut <- stan(file = 'modelWorksPdetect.stan', data = stanData, chains = 3, iter = 8000)
         sumOut <- summary(stanOut)
         stanSummary$psiRecovered[ simIndex] <- sumOut$summary[ grep("pPsi", rownames(sumOut$summary)), "mean"]
         stanSummary$pRecovered[ simIndex] <- sumOut$summary[ grep("pDetect", rownames(sumOut$summary)), "mean"]
