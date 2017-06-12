@@ -80,7 +80,7 @@ foreach(Idx = 1:parameterValue[ , max(Index)]) %dopar% {
             simulateData[ , eval(ZobsName) := 1]
         } else {
             simulateData[ , eval(ZobsName) := 0]
-        }
+ }
     }
     
     ##    print(Idx)
