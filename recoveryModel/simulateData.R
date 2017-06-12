@@ -4,7 +4,7 @@ library(doMC)
 library(parallel)
 
 ## Register number of cores for parallel compututing (i.e., HPC)
-registerDoMC(3}
+registerDoMC(40)
 
 ## Generate all possible parameter combinations and place into table and then save
 K_in        <- c( 2, 4, 8, 16)
