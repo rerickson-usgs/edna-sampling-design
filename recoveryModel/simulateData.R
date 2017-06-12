@@ -10,8 +10,8 @@ registerDoMC(40)
 K_in        <- c( 2, 4, 8, 16)
 theta_in    <- c( 0.06, 0.24, 0.42, 0.76)
 p_in        <- c( 0.15, 0.3, 0.35, 0.4, 0.75)
-psi_in      <- c( 0.06, 0.24, 0.42, 0.75)
-nSamples_in <- c( 5, 10, 20, 30, 60, 90, 120)
+psi_in      <- 1
+nSamples_in <- c( 5, 10, 20, 30, 50, 75, 100, 125)
 
 
 parameterValue <- data.table(expand.grid(
@@ -30,7 +30,7 @@ write.csv(x = parameterValue, file = paste0("parmaterValue.csv"), row.names = FA
 ## Simulate datasets
 
 ## Number of datasets to simulate
-nSims <- 2
+nSims <- 2000
 
 ## Loop through parameter values
 nDataSetsToSimulate = parameterValue[ , max(Index)]
@@ -47,10 +47,10 @@ foreach(Idx = 1:nDataSetsToSimulate, .errorhandling="pass") %dopar% {
 
     ## Create Index in data table 
     simulateData <- data.table(
-        parameterIndex = rep(Idx, nSamples * K),
-        Zindex = rep(1, nSamples * K),
-        Aindex = rep(1:nSamples, each = K),
-        Yindex = 1:(nSamples * K)
+        parameterIndex = rep(Idx, nSamples),
+        Zindex = rep(1, nSamples),
+        Aindex = rep(1:nSamples),
+        Yindex = 1:(nSamples)
         )
 
     ## Loop through each simulation 
@@ -61,9 +61,9 @@ foreach(Idx = 1:nDataSetsToSimulate, .errorhandling="pass") %dopar% {
         YobsName <- paste0("Y_", sim)
 
         ## Simulated "known" Zs and As to generate observed Ys
-        Zsim <- rep(rbinom( n = nSamples,     size = 1, prob = psi  ), each = K)
-        Asim <- rep(rbinom( n = nSamples,     size = 1, prob = theta), each = K) * Zsim
-        Yobs <-     rbinom( n = nSamples * K, size = K, prob = p) * Asim
+        Zsim <- rep(psi, nSamples)
+        Asim <- rbinom( n = nSamples, size = 1, prob = theta) * Zsim
+        Yobs <- rbinom( n = nSamples, size = K, prob = p) * Asim
 
         simulateData[ , eval(YobsName) := Yobs]
 
