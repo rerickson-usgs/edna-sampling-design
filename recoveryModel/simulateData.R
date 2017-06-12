@@ -4,7 +4,7 @@ library(doMC)
 library(parallel)
 
 ## Register number of cores for parallel compututing (i.e., HPC)
-registerDoMC(2)
+registerDoMC(40)
 
 ## Generate all possible parameter combinations and place into table and then save
 K_in        <- c( 2, 4, 8, 16)
@@ -30,7 +30,7 @@ write.csv(x = parameterValue, file = paste0("parmaterValue.csv"), row.names = FA
 ## Simulate datasets
 
 ## Number of datasets to simulate
-nSims <- 2000
+nSims <- 2
 
 ## Loop through parameter values
 nDataSetsToSimulate = parameterValue[ , max(Index)]
