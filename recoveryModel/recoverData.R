@@ -11,7 +11,7 @@ K <- parameterValue$K[ parameterValue$Index == condorIndex]
 
 inFilename <- paste0( "simulatedData", condorIndex -1, ".csv")
 d <- read.csv(inFilename)
-nSims = dim(d)[2] - 1
+nSims = dim(d)[2] - 4
 
 ## create CSV to save outputs
 
