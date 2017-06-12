@@ -4,7 +4,7 @@ library(doMC)
 library(parallel)
 
 ## Register number of cores for parallel compututing (i.e., HPC)
-registerDoMC(40)
+registerDoMC(2)
 
 ## Generate all possible parameter combinations and place into table and then save
 K_in        <- c( 2, 4, 8, 16)
@@ -32,8 +32,9 @@ write.csv(x = parameterValue, file = paste0("parmaterValue.csv"), row.names = FA
 ## Number of datasets to simulate
 nSims <- 2000
 
-## Loop through parameter values 
-foreach(Idx = 1:parameterValue[ , max(Index)]) %dopar% {
+## Loop through parameter values
+nDataSetsToSimulate = parameterValue[ , max(Index)]
+foreach(Idx = 1:nDataSetsToSimulate, .errorhandling="pass") %dopar% {
 
     ## Grab parameter values from table 
     psi      = parameterValue[ Index == Idx, psi]
@@ -41,15 +42,15 @@ foreach(Idx = 1:parameterValue[ , max(Index)]) %dopar% {
     p        = parameterValue[ Index == Idx, p]
     K        = parameterValue[ Index == Idx, K]
     nSamples = parameterValue[ Index == Idx, nSamples]
-    
+
     ## Loop through and simulate datasets
 
     ## Create Index in data table 
     simulateData <- data.table(
-        parameterIndex = Idx,
-        Zindex = 1,
+        parameterIndex = rep(Idx, nSamples * K),
+        Zindex = rep(1, nSamples * K),
         Aindex = rep(1:nSamples, each = K),
-        Yindex = 1:(nSamples * K),
+        Yindex = 1:(nSamples * K)
         )
 
     ## Loop through each simulation 
@@ -80,15 +81,17 @@ foreach(Idx = 1:parameterValue[ , max(Index)]) %dopar% {
             simulateData[ , eval(ZobsName) := 1]
         } else {
             simulateData[ , eval(ZobsName) := 0]
- }
+        }
     }
+    
     
     ##    print(Idx)
     ## -1 is needed to convert output to HTCondor's 0-based indexing 
     write.csv(x = simulateData, file = paste0(fileFolder, "simulatedData",
                                               Idx - 1, ".csv"),
               row.names = FALSE)
-    }
+}
+
 
 
     
