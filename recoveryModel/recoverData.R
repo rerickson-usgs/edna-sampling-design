@@ -33,10 +33,16 @@ stanSummary <- data.frame(ParameterIndex = rep(condorIndex, nSims),
 ## Setup Stan input and then look at recovery of data
 
 for(simIndex in 1:nSims){
-    Y = d[, simIndex + 1]
+
+    ZobsName <- paste0("Z_", simIndex + 1)
+    AobsName <- paste0("A_", simIndex + 1)
+    YobsName <- paste0("Y_", simIndex + 1)
+
+    Z = d[, eval( as.sybmol( ZobsName))]
+    A = d[, eval( as.sybmol( AobsName))]
+    Y = d[, eval( as.sybmol( YobsName))]
     nObs = length(Y)
-    A = as.numeric(Y >0)
-    Z = as.numeric(Y >0)
+    
     ## Just leaving non-detects as NA, will need to be post-processed 
     if(sum(Y) != 0){
         stanData <- list(
