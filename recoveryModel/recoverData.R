@@ -1,5 +1,5 @@
 library(rstan)
-library(data.table)
+
 ## + 1 needed because condor lives in 0 index work but R lives in 
 condorIndex <- as.numeric(commandArgs(trailingOnly = TRUE)) + 1
 
@@ -38,9 +38,9 @@ for(simIndex in 1:nSims){
     AobsName <- paste0("A_", simIndex + 1)
     YobsName <- paste0("Y_", simIndex + 1)
 
-    Z = d[, eval( as.sybmol( ZobsName))]
-    A = d[, eval( as.sybmol( AobsName))]
-    Y = d[, eval( as.sybmol( YobsName))]
+    Z = d[ , ZobsName]
+    A = d[ , AobsName]
+    Y = d[ , YobsName]
     nObs = length(Y)
     
     ## Just leaving non-detects as NA, will need to be post-processed 
