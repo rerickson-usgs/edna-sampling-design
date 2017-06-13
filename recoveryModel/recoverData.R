@@ -1,5 +1,5 @@
 library(rstan)
-
+library(data.table)
 ## + 1 needed because condor lives in 0 index work but R lives in 
 condorIndex <- as.numeric(commandArgs(trailingOnly = TRUE)) + 1
 
@@ -10,7 +10,7 @@ K <- parameterValue$K[ parameterValue$Index == condorIndex]
 
 
 inFilename <- paste0( "simulatedData", condorIndex -1, ".csv")
-d <- read.csv(inFilename)
+d <- fread(inFilename)
 nSims = dim(d)[2] - 4
 
 ## create CSV to save outputs
