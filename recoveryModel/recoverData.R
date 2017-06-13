@@ -34,9 +34,9 @@ stanSummary <- data.frame(ParameterIndex = rep(condorIndex, nSims),
 
 for(simIndex in 1:nSims){
 
-    ZobsName <- paste0("Z_", simIndex + 1)
-    AobsName <- paste0("A_", simIndex + 1)
-    YobsName <- paste0("Y_", simIndex + 1)
+    ZobsName <- paste0("Z_", simIndex )
+    AobsName <- paste0("A_", simIndex )
+    YobsName <- paste0("Y_", simIndex )
 
     Z = d[ , ZobsName]
     A = d[ , AobsName]
