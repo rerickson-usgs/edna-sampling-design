@@ -5,11 +5,11 @@ library(data.table)
 ## + 1 needed because condor lives in 0 index work but R lives in 
 condorIndex <- as.numeric(commandArgs(trailingOnly = TRUE)) + 1
 
-## Read in data
+## Read in parameter values data
 parameterValue <- fread("./parmaterValue.csv")
 
 ## Number of datasets to simulate
-nSims <- 2000
+nSims <- 120
 
 ## Grab parameter values from table 
 psi      = parameterValue[ Index == condorIndex, psi]
@@ -29,6 +29,7 @@ simulateData <- data.table(
 )
 
 ## Loop through each simulation 
+
 for(sim in 1:nSims){
     ## Create observed parameter values names 
     ZobsName <- paste0("Z_", sim)
@@ -37,37 +38,19 @@ for(sim in 1:nSims){
     
     ## Simulated "known" Zs and As to generate observed Ys
     Zsim <- rep(psi, nSamples)
-    Asim <- rbinom( n = nSamples, size = 1, prob = theta) * Zsim
-    Yobs <- rbinom( n = nSamples, size = K, prob = p) * Asim
+    Asim <- rbinom( n = nSamples, size = 1, prob = theta * Zsim) 
+    Yobs <- rbinom( n = nSamples, size = K, prob = p  * Asim)
     
     simulateData[ , eval(YobsName) := Yobs]
-    
-    ## "observed As based upon Ys
-    for(Aidx in 1:nSamples){
-        if(sum(Yobs[simulateData[ , Aindex == Aidx]]) > 0){
-            simulateData[ Aindex == Aidx, eval(AobsName) := 1]
-        } else {
-            simulateData[ Aindex == Aidx, eval(AobsName) := 0]
-        }
-    }
-    ## Observed Z based upon As
-    ## Note this code would need to be changed if there were multiple sites present 
-    if(sum(Asim) > 0){
+
+    simulateData[ , eval(AobsName) := 0]
+    simulateData[ eval(as.symbol(YobsName)) > 0, eval(AobsName) := 1]
+
+    simulateData[ , eval(ZobsName) := 0]
+    if(simulateData[ , sum(eval(as.symbol(AobsName))) > 0]){
         simulateData[ , eval(ZobsName) := 1]
-    } else {
-        simulateData[ , eval(ZobsName) := 0]
     }
 }
 
-
 ## -1 is needed to convert output to HTCondor's 0-based indexing 
 write.csv(x = simulateData, file = "simulatedData.csv", row.names = FALSE)
-
-
-
-
-
-    
-
-
-
