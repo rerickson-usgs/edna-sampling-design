@@ -10,8 +10,10 @@ K <- parameterValue$K[ parameterValue$Index == condorIndex]
 
 
 inFilename <- paste0( "simulatedData", condorIndex -1, ".csv")
+
 d <- read.csv(inFilename)
-nSims = dim(d)[2] - 4
+
+nSims = (dim(d)[2] - 4)/3
 
 ## create CSV to save outputs
 
@@ -34,9 +36,9 @@ stanSummary <- data.frame(ParameterIndex = rep(condorIndex, nSims),
 
 for(simIndex in 1:nSims){
 
-    ZobsName <- paste0("Z_", simIndex + 1)
-    AobsName <- paste0("A_", simIndex + 1)
-    YobsName <- paste0("Y_", simIndex + 1)
+    ZobsName <- paste0("Z_", simIndex)
+    AobsName <- paste0("A_", simIndex)
+    YobsName <- paste0("Y_", simIndex)
 
     Z = d[, eval( as.sybmol( ZobsName))]
     A = d[, eval( as.sybmol( AobsName))]
