@@ -9,8 +9,8 @@ output	= output/out$(Process).txt
 # requirements=(Machine == igsarfebaskoi00)
 requirements = OpSys == "LINUX"
 request_memory = 0.5GB
-transfer_output_files   = simulatedData.csv
-transfer_output_remaps  = "simulatedDataSets/simulatedData$(Process).csv"
+transfer_output_files   =  simulatedData.csv
+transfer_output_remaps  = "simulatedData.csv = simulatedDataSets/simulatedData$(Process).csv"
 should_transfer_files	= Yes
 when_to_transfer_output	= ON_EXIT_OR_EVICT
 accounting_group = group_AEH
