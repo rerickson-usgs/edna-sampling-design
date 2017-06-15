@@ -9,7 +9,7 @@ condorIndex <- as.numeric(commandArgs(trailingOnly = TRUE)) + 1
 parameterValue <- fread("./parmaterValue.csv")
 
 ## Number of datasets to simulate
-nSims <- 2000
+nSims <- 120
 
 ## Grab parameter values from table 
 psi      = parameterValue[ Index == condorIndex, psi]
