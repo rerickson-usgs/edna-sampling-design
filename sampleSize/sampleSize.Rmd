@@ -123,18 +123,18 @@ Next, we explore different sample numbers, \(n \in \{20, 50, 100\}\); different 
 sampleResults <- samplesDetect(nSims = 4000, 
                                theta = c(0.06, 0.24, 0.42, 0.76), 
                                pDetection = c(0.15, 0.3, 0.35, 0.4, 0.75),
-                               J = c(20, 50, 100),
+                               J = c(5, 20, 50, 100),
                                K = c(2, 4, 8, 16))
 ```
 
 Last, we plot the results using `ggplot2`
 ```{r occProbSimPlot, echo = TRUE, fig.cap="Proportion of samples per site (Sample occurance) that are positive based upon sample size and the assay's probability of detection."}
-compareSites <- ggplot(sampleResults, aes(x = J, y = pPositive, fill = thetaPlot)) +
+compareSites <- ggplot(sampleResults, aes(x = KPlot2, y = pPositive, fill = thetaPlot)) +
 	geom_boxplot(outlier.size = 0.5) + 
-	facet_grid(  KPlot ~  pDetectionPlot ) + 
+	facet_grid(  Samples ~  pDetectionPlot ) + 
   theme_minimal() +
 	ylab(expression("Propotion of positive samples (Simulated "*theta*")")) +
-  xlab("Number of samples per site") +
+  xlab("Number of molecular replicates") +
   scale_fill_manual(expression(theta), values = c("orange", 'seagreen', 'red', "blue"))
 
 print(compareSites)
