@@ -1,6 +1,6 @@
 ---
 title: "Probabilility of detections and sample occurance"
-author: "Richard Erickson, Chris Merkes, and Erica Mize"
+author: "Richard A. Erickson, Chris M. Merkes, and Erica L. Mize"
 date: "2017"
 output:
   pdf_document: default
@@ -62,7 +62,7 @@ detectOne <- ggplot(data = results, aes(x = J, y = ProbDetect, color = KPlot)) +
 	theme_minimal() + 
 	ylab("Probabiltiy of detecting species at site") +
 	xlab("Number of samples per site") +
-  scale_color_manual("Number\nof PCR\nreplicates", values = c("wheat4", 'black', 'red', "blue"))
+  scale_color_manual("Molecular\nreplicates", values = c("wheat4", 'black', 'red', "blue"))
 print(detectOne)
 ggsave(filename = "detectingOne.pdf", detectOne, width = 6, height = 4)
 ggsave(filename = "detectingOne.jpg", detectOne, width = 6, height = 4)
@@ -117,24 +117,24 @@ samplesDetect <- function(
 	}
 ```
 
-Next, we explore different sample numbers, \(n \in \{20, 50, 100\}\); different assay detection probabilities, \(p \in \{0.3, 0.35, 0.4, 0.75\}\); and different sample detection probabilities, \(\theta \in \{0.06, 0.24, 0.42, 0.75\}\) by running 4,000 simulations.
+Next, we explore different sample numbers, \(n \in \{20, 50, 100\}\); different assay detection probabilities, \(p \in \{0.15, 0.3, 0.35, 0.4, 0.75\}\); and different sample detection probabilities, \(\theta \in \{0.06, 0.24, 0.42, 0.76\}\) by running 4,000 simulations.
 
 ```{r occProbSim, echo = TRUE, results='hide'}
 sampleResults <- samplesDetect(nSims = 4000, 
-                               theta = c(0.06, 0.24, 0.42, 0.75), 
-                               pDetection = c(0.3, 0.35, 0.4, 0.75),
+                               theta = c(0.06, 0.24, 0.42, 0.76), 
+                               pDetection = c(0.15, 0.3, 0.35, 0.4, 0.75),
                                J = c(20, 50, 100),
                                K = c(2, 4, 8, 16))
 ```
 
 Last, we plot the results using `ggplot2`
 ```{r occProbSimPlot, echo = TRUE, fig.cap="Proportion of samples per site (Sample occurance) that are positive based upon sample size and the assay's probability of detection."}
-compareSites <- ggplot(sampleResults, aes(x = KPlot2, y = pPositive, fill = thetaPlot2)) +
+compareSites <- ggplot(sampleResults, aes(x = J, y = pPositive, fill = thetaPlot)) +
 	geom_boxplot(outlier.size = 0.5) + 
-	facet_grid( pDetectionPlot ~ Samples) + 
+	facet_grid(  KPlot ~  pDetectionPlot ) + 
   theme_minimal() +
-	ylab("Propotion of positive samples") +
-  xlab("PCR replicates per sample") +
+	ylab(expression("Propotion of positive samples (Simulated "*theta*")")) +
+  xlab("Number of samples per site") +
   scale_fill_manual(expression(theta), values = c("orange", 'seagreen', 'red', "blue"))
 
 print(compareSites)
