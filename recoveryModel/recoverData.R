@@ -39,10 +39,11 @@ for(simIndex in 1:nSims){
     ZobsName <- paste0("Z_", simIndex)
     AobsName <- paste0("A_", simIndex)
     YobsName <- paste0("Y_", simIndex)
-
-    Z = d[, eval( as.sybmol( ZobsName))]
-    A = d[, eval( as.sybmol( AobsName))]
-    Y = d[, eval( as.sybmol( YobsName))]
+    print(ZobsName)
+    print(d)
+    Z = d[, colnames(d) == ZobsName]
+    A = d[, colnames(d) == AobsName]
+    Y = d[, colnames(d) == ZobsName]
     nObs = length(Y)
     
     ## Just leaving non-detects as NA, will need to be post-processed 

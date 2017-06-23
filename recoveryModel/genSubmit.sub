@@ -10,9 +10,10 @@ output	= output/out$(Process).txt
 requirements = OpSys == "LINUX"
 request_memory = 0.5GB
 transfer_output_files   = simulatedData.csv
-transfer_output_remaps  = "simulatedDataSets/simulatedData$(Process).csv"
-should_transfer_files	= Yes
+transfer_output_remaps  = "simulatedData.csv = ./simulatedDataSets/simulatedData$(Process).csv"
+should_transfer_files	= YES
 when_to_transfer_output	= ON_EXIT_OR_EVICT
+#when_to_transfer_output = ALWAYS
 accounting_group = group_AEH
 accounting_group_user =raerickson
 queue 800
