@@ -8,7 +8,7 @@ error	= output/errRec$(Process).txt
 output	= output/outRec$(Process).txt
 # requirements=(Machine == igsarfebaskoi00)
 requirements = OpSys == "LINUX"
-request_memory = 2.9GB
+request_memory = 3.0GB
 transfer_output_files   = stanSummary.csv
 transfer_output_remaps  = "stanSummary.csv = dataOut/stanSummary_$(Process).csv"
 should_transfer_files	= Yes
