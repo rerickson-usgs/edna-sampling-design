@@ -40,7 +40,7 @@ for(simIndex in 1:nSims){
       
     Z = d[, colnames(d) == ZobsName]
     A = d[, colnames(d) == AobsName]
-    Y = d[, colnames(d) == ZobsName]
+    Y = d[, colnames(d) == YobsName]
     nObs = length(Y)
     
     ## Just leaving non-detects as NA, will need to be post-processed 
