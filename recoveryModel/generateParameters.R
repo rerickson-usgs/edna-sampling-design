@@ -1,7 +1,7 @@
 library(data.table)
 
 ## Generate all possible parameter combinations and place into table and then save
-K_in        <- c( 2, 4, 8, 16)
+K_in        <- c( 2, 3, 4, 8, 16)
 theta_in    <- c( 0.06, 0.24, 0.42, 0.76)
 p_in        <- c( 0.15, 0.3, 0.35, 0.4, 0.75)
 psi_in      <- 1
