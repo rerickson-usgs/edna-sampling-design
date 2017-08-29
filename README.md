@@ -47,7 +47,7 @@ The `recoverModel` file contains script to simulate different eDNA-based samplin
   - `simulateData.R` simulates the datasets recovered by the model. 
 
 A user of the model would most likely want to examine the `demonstrateModel.R` file and use it with the Stan model if they want to analyze their own data.
-A user who wants to recreate our workflow should start with `my.dag` and follow our workflow from that file. 
+A user who wants to recreate our workflow would most likely want to start reading `my.dag` and follow our workflow from that file. 
 
 ## Contact for code 
 
