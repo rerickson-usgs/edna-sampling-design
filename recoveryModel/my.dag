@@ -1,0 +1,3 @@
+JOB A genSubmit.sub 
+JOB B recSubmit.sub
+PARENT A CHILD B 

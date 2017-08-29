@@ -52,5 +52,6 @@ for(sim in 1:nSims){
     }
 }
 
+print(paste("done simulating data", condorIndex))
 ## -1 is needed to convert output to HTCondor's 0-based indexing 
 write.csv(x = simulateData, file = "simulatedData.csv", row.names = FALSE)

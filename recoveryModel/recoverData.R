@@ -3,11 +3,9 @@ library(rstan)
 ## + 1 needed because condor lives in 0 index work but R lives in 
 condorIndex <- as.numeric(commandArgs(trailingOnly = TRUE)) + 1
 
-
 parameterValue <- read.csv("parmaterValue.csv")
 
 K <- parameterValue$K[ parameterValue$Index == condorIndex]
-
 
 inFilename <- paste0( "simulatedData", condorIndex -1, ".csv")
 
@@ -39,10 +37,10 @@ for(simIndex in 1:nSims){
     ZobsName <- paste0("Z_", simIndex)
     AobsName <- paste0("A_", simIndex)
     YobsName <- paste0("Y_", simIndex)
-
-    Z = d[, eval( as.sybmol( ZobsName))]
-    A = d[, eval( as.sybmol( AobsName))]
-    Y = d[, eval( as.sybmol( YobsName))]
+      
+    Z = d[, colnames(d) == ZobsName]
+    A = d[, colnames(d) == AobsName]
+    Y = d[, colnames(d) == YobsName]
     nObs = length(Y)
     
     ## Just leaving non-detects as NA, will need to be post-processed 
