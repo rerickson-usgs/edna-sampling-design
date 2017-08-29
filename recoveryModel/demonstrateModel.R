@@ -1,8 +1,4 @@
-## On Monday, need to debug:
-## Step 1: make sure simulating data correctly
-## Sites and samples
-## Step 2: make sure stan model is correct
-## Step 3: make sure simulated data is summarized correctly (Aobs and Zobs)
+## This file demonstrates how to simulate data and use RStan to call our Stan model.
 
 library(data.table)
 library(rstan)
@@ -38,11 +34,8 @@ siteTable <- data.table(
 )
 
 
-siteTable
 siteTable[ , Z := rbinom(n = nrow(siteTable), 1, prob = siteTable[ , pPsi])]
-
-
-print(siteTable)
+print(siteTable, 6)
 siteTable[ , sum(Z)/nSamplesPerSite, by = list(siteIndex)]
     
 ## Probability of detecion (varies across site)
@@ -66,8 +59,6 @@ siteSampleTable[ , A := rbinom(n = nrow(siteSampleTable), 1,
                                prob =  Z * pTheta)]
 
 ## Simulate Y
-siteSampleTable
-
 siteSampleTable[ , Y := rbinom(n = nrow(siteSampleTable), nReplicatesPerSample,
                                prob =  Z * A * pDetection)]
 siteSampleTable[ , Aobs := 0]
@@ -120,26 +111,21 @@ stanData <- list(
     K = nReplicatesPerSample
 )
 
-siteSampleTable
-stanData
-
-system.time(
-    stanOut <- stan(file = 'modelWorks.Stan', data = stanData, chains = 3, iter = 8000)
-)
-
 system.time(
     stanOut1 <- stan(file = 'modelWorksPdetect.Stan', data = stanData, chains = 3, iter = 8000)
 )
 
 
-stanOut
-stanOut1
+## examine recovered values 
 sampleTable
 pTheta
-pairs(stanOut, pars = c("muPpsi", "muPtheta", "muPdetect"))
-x11()
-plot(stanOut, pars = c("pPsi", "pTheta", "pDetect"))
-x11()
-traceplot(stanOut, pars = c("pPsi", "pTheta", "pDetect", "lp__"))
 pPsi
+pDetection
+
+pairs(stanOut1, pars = c("muPpsi", "muPtheta", "muPdetect"))
+x11()
+plot(stanOut1, pars = c("pPsi", "pTheta", "pDetect"))
+x11()
+traceplot(stanOut1, pars = c("pPsi", "pTheta", "pDetect", "lp__"))
+
 
