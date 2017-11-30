@@ -32,7 +32,7 @@ sampleDetectionOne <- function(
 	}
 ```
 
-Next, we explore different sample numbers, \(J \in 1, 2, \ldots 100\); different assay detection probabilities, \(\theta \in \{0.3, 0.35, 0.4, 0.75\}\); different sample detection probabilities, \(p \in \{0.06, 0.24, 0.42, 0.75\}\); and different numbers of molecular replicates \(K \in \{2, 4, 8, 16\}\).
+Next, we explore different sample numbers, \(J \in 1, 2, \ldots 100\); different assay detection probabilities, \(\theta \in \{0.06, 0.24, 0.42, 0.75\}\); different sample detection probabilities, \(p \in \{0.3, 0.35, 0.4, 0.75\}\); and different numbers of molecular replicates \(K \in \{2, 3, 4, 8, 16\}\).
 
 We use the `data.table` package for storing and manipulating my data.
 
@@ -40,7 +40,7 @@ We use the `data.table` package for storing and manipulating my data.
 library(data.table)
 results <- data.table(expand.grid(J = 1:100, 
 							theta = c(0.06, 0.24, 0.42, 0.75), pDetection = c(0.3, 0.35, 0.4, 0.75),
-							K = c(2, 4, 8, 16)))
+							K = c(2, 3, 4, 8, 16)))
 results[ , ProbDetect := 
 	sampleDetectionOne(J = J, K = K, theta = theta, pDetection = pDetection)]
 
@@ -54,7 +54,9 @@ Last, we plot the results using `ggplot2`.
 ```{r occ_code, echo = TRUE , fig.cap="Probability of detecting a species in at least one sample at a site given different assay and sample detection probabilities."}
 
 library(ggplot2)
-results[ , KPlot := factor(KPlot, levels = levels(results$KPlot)[c(2, 3, 4, 1)])]
+results[ , KPlot := factor(KPlot, 
+                           levels = levels(results$KPlot)[order(as.numeric(gsub("K = ", "", 
+                                                                      levels(results$KPlot))))])]
 
 detectOne <- ggplot(data = results, aes(x = J, y = ProbDetect, color = KPlot)) + 
 	geom_line() +
@@ -62,7 +64,8 @@ detectOne <- ggplot(data = results, aes(x = J, y = ProbDetect, color = KPlot)) +
 	theme_minimal() + 
 	ylab("Probabiltiy of detecting species at site") +
 	xlab("Number of samples per site") +
-  scale_color_manual("Molecular\nreplicates", values = c("wheat4", 'black', 'red', "blue"))
+  scale_color_manual("Molecular\nreplicates", 
+                     values = c("red", "blue", "black", "seagreen", "orange"))
 print(detectOne)
 ggsave(filename = "detectingOne.pdf", detectOne, width = 6, height = 4)
 ggsave(filename = "detectingOne.jpg", detectOne, width = 6, height = 4)
@@ -124,7 +127,7 @@ sampleResults <- samplesDetect(nSims = 4000,
                                theta = c(0.06, 0.24, 0.42, 0.76), 
                                pDetection = c(0.15, 0.3, 0.35, 0.4, 0.75),
                                J = c(5, 20, 50, 100),
-                               K = c(2, 4, 8, 16))
+                               K = c(2, 3, 4, 8, 16))
 ```
 
 Last, we plot the results using `ggplot2`
@@ -133,13 +136,13 @@ compareSites <- ggplot(sampleResults, aes(x = KPlot2, y = pPositive, fill = thet
 	geom_boxplot(outlier.size = 0.5) + 
 	facet_grid(  Samples ~  pDetectionPlot ) + 
   theme_minimal() +
-	ylab(expression("Propotion of positive samples (Simulated "*theta*")")) +
+	ylab(expression(over("Number of simulated positive samples","Total number of simulated samples"))) +
   xlab("Number of molecular replicates") +
-  scale_fill_manual(expression(theta), values = c("orange", 'seagreen', 'red', "blue"))
-
+  scale_fill_manual(expression("Generating "*theta), 
+                    values = c("red", "blue", "black", "seagreen", "orange"))
 print(compareSites)
-ggsave(filename = "compareSites.pdf", compareSites, width = 9, height = 6)
-ggsave(filename = "compareSites.jpg", compareSites, width = 9, height = 6)
+ggsave(filename = "compareSites.pdf", compareSites, width = 11, height = 6)
+ggsave(filename = "compareSites.jpg", compareSites, width = 11, height = 6)
 ```
 
 
