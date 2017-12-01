@@ -14,7 +14,7 @@ The `recoverModel` folder corresponds to using the model to recover datasets as 
 The simulated datasets used for the manuscript are housed as a ScienceBase Product (DOI here).
 
 
-## Power analysis
+## Sample size analysis
 
 The `sampleSize` folder contains script files to examine necessary sample sizes to detect DNA assuming the speices is present at a site (i.e., phi = 1). This code can be adapted to conduct a power analysis assuming a species is present at a site. The specific files included here are:
 
