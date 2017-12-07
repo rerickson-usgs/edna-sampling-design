@@ -76,7 +76,8 @@ We use the `data.table` package for storing and manipulating my data.
 ```{r occ_model_run, echo = TRUE, results = 'hide'}
 library(data.table)
 results <- data.table(expand.grid(J = 1:100,
-							theta = c(0.06, 0.24, 0.42, 0.75), pDetection = c(0.3, 0.35, 0.4, 0.75),
+							theta = c(0.06, 0.24, 0.42, 0.75), 
+							pDetection = c(0.3, 0.35, 0.4, 0.75),
 							K = c(2, 3, 4, 8, 16)))
 
 for(index in 1:nrow(results)){
@@ -94,7 +95,9 @@ Last, we plot the results using `ggplot2`.
 
 library(ggplot2)
 results[ , KPlot := factor(KPlot,
-                           levels = levels(results$KPlot)[order(as.numeric(gsub("K = ", "", levels(results$KPlot))))])]
+                           levels = levels(results$KPlot)[
+                             order(as.numeric(gsub("K = ", "",
+                                                   levels(results$KPlot))))])]
 
 detectOne <- ggplot(data = results, aes(x = J, y = ProbDetect, color = KPlot)) +
 	geom_line() +
@@ -142,11 +145,16 @@ samplesDetect <- function(
 
   results[ , pDetectionPlot := factor(paste0("p = ", pDetection))]
 
-	factorOrder <- order(as.numeric(gsub("J = ", "", levels(results$Samples))), decreasing = FALSE)
+	factorOrder <- order(as.numeric(gsub("J = ", "", 
+	                                     levels(results$Samples))), 
+	                     decreasing = FALSE)
   results[ , Samples := factor(Samples, levels = levels(Samples)[factorOrder]) ]
 
   results[ , KPlot := paste0("K = ", K)]
-  KOrder <- unique(results$KPlot)[order(as.numeric(gsub("K = ", "", unique(results$KPlot))), decreasing = FALSE)]
+  KOrder <- unique(results$KPlot)[
+    order(as.numeric(gsub("K = ", "",
+                          unique(results$KPlot))), 
+          decreasing = FALSE)]
   results[ , KPlot := factor( KPlot, levels = KOrder)]
 
   results[ , KPlot2 := factor(gsub("K = ", "", KPlot))]
@@ -173,7 +181,8 @@ compareSites <- ggplot(sampleResults, aes(x = KPlot2, y = pPositive, fill = thet
 	geom_boxplot(outlier.size = 0.5) +
 	facet_grid(  Samples ~  pDetectionPlot ) +
   theme_minimal() +
-	ylab(expression(over("Number of simulated positive samples","Total number of simulated samples"))) +
+	ylab(expression(over("Number of simulated positive samples",
+	                     "Total number of simulated samples"))) +
   xlab("Number of molecular replicates") +
   scale_fill_manual(expression("Generating "*theta),
                     values = c("red", "blue", "black", "seagreen", "orange"))

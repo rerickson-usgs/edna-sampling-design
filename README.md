@@ -32,6 +32,7 @@ A user would most likely want to either read the `sampleSize.PDF` or adapt the `
 
 The `recoverModel` file contains script to simulate different eDNA-based sampling designs and then recover the data using a three-level occupancy model. The code has been developed to use HTCondor. We have previously developed tutorials for [HTCondor](https://my.usgs.gov/bitbucket/projects/CDI/repos/hunting_invasive_species_with_htcondor/browse). The specific files and folders included here are:
 
+- `recoveryMethods.md` describes in detail the methods used to simulate and recover the data.
 - `simulatedDataSets` a folder where the simulate datasets are placed. One token dataset is placed in the folder so that `git` will track the folder when cloned to a new location.
 - `demonstrateModel.R` is a file that demonstrates how the Stan models works. The file was used to test and devlepe the Stan model, although users may find it helpful if they want to use our model to recreate their work. 
 - The following files are used by HTCondor for the data simulation and recovery 
