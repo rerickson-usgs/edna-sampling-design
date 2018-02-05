@@ -60,7 +60,8 @@ model {
     } else {
       target += log_sum_exp(
 			    log_sum_exp( # No DNA at the site nor within sample
-					log_inv_muPpsi[psiID[d]] + 
+					log_inv_muPpsi[psiID[d]] +
+					log_inv_muPtheta[thetaID[d]] + 
 					binomial_logit_lpmf(Y[d] | K,
 							     muPdetect[pID[d]]),
 					log1m_inv_muPpsi[psiID[d]]),
