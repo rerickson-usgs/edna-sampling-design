@@ -6,7 +6,6 @@ transfer_input_files	= recoverData.R, modelWorksPdetect.stan, parmaterValue.csv,
 log	= output/logRec$(Process).txt
 error	= output/errRec$(Process).txt
 output	= output/outRec$(Process).txt
-# requirements=(Machine == igsarfebaskoi00)
 requirements = OpSys == "LINUX"
 request_memory = 3.0GB
 transfer_output_files   = stanSummary.csv
