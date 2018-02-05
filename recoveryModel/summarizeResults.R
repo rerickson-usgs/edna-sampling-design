@@ -27,7 +27,6 @@ ggplot(allData, aes(x = pRecoveredSE)) + geom_histogram() + xlim(c(0, 0.025))
 ## Readin, create factors, and merge in parameter Values
 
 params <- fread("parmaterValue.csv")
-## params <- fread("parmaterValue16June17.csv")
 
 params[ , K2 := factor(paste( "K = ", K))]
 params[ , theta2 := factor(paste("theta =", theta))]
@@ -38,7 +37,6 @@ params[ , psi2 := factor(paste("psi =", psi))]
 setkey(params, "Index")
 setkey(allData, "ParameterIndex")
 
-allData[ , length(K), by = list(K2, theta2, p2, psi2)]
 allData <- allData[params]
 
 colnames(allData)
