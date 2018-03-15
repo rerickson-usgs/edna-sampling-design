@@ -2,22 +2,20 @@ library(data.table)
 library(ggplot2)
 
 ## Get file names
-filePath <- "./dataOut/"
+filePath <- "./dataOut"
 allFiles <- list.files(filePath)
 saveFiles <- paste0(filePath, "/", allFiles[grep("stanSummary", allFiles)])
 saveFiles
 
 ## merge files together
-allData <- fread(saveFiles[1])
+l <- lapply( saveFiles, fread, sep=",")
+allData <- rbindlist( l )
 
-for(index in 2:length(saveFiles)){
-    allData <- rbind(allData, fread(saveFiles[index]))
-    }
 dim(allData)
 
 ## Create histogram of all SEs here
 
-ggplot(allData, aes(x = pRecoveredSE)) + geoxm_histogram() +
+ggplot(allData, aes(x = pRecoveredSE)) + geom_histogram() +
     theme_minimal() + ylab("Count") + xlab("Recovered se for p")
     
 
@@ -132,7 +130,8 @@ ggPsi <- ggplot(data = dND, aes(color = K2,
     scale_shape_manual("Molecular\ndetection", values = 15:19) +
     theme_minimal() +
     ylab("Recovered psi from samples with any detection") +
-    xlab("Number of samples per site (J)")
+    xlab("Number of samples per site (J)") +
+    coord_cartesian(ylim = c(0,1))
 
 print(ggPsi)
 ggsave(filename = "ggPsi.pdf", ggPsi, width = 11, height = 6)
@@ -250,7 +249,8 @@ ggPlotSubSet <- ggplot(data = dSubSetND2med, aes(x = factor(nSamples),
     theme_minimal() +
     ylab("Recovered parameter value") +
     xlab("Number of samples per site (J)") +
-    geom_hline(data = parSubMelt, aes(yintercept = yInt))
+    geom_hline(data = parSubMelt, aes(yintercept = yInt)) +
+    coord_cartesian(ylim = c(0,1))
 
 print(ggPlotSubSet)
 

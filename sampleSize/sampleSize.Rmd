@@ -1,8 +1,9 @@
 ---
 title: "Probabilility of detections and sample occurance"
 author: "Richard A. Erickson, Chris M. Merkes, and Erica L. Mize"
-date: 
+date: "null"
 output:
+  html_document: default
   pdf_document: default
 fig_caption: yes
 ---
@@ -14,14 +15,14 @@ assign("depthtrigger", 10, data.table:::.global)
 
 ## Derviation of probabilty calucation
 
-Calcuating the probabilty of eDNA occuring given two levels of sampling is not straight forward. 
-Rather than calculating the probabilty of detecting eDNA, we calculate the probabiltiy of non-detecting DNA and then subtract it from 1.
-The probability of eDNA occuring is a sample is \(\theta\).
+Calculating the probability of eDNA occurring given two levels of sampling is not straight forward. 
+Rather than calculating the probability of detecting eDNA, we calculate the probability of non-detecting DNA and then subtract it from 1.
+The probability of eDNA occurring is a sample is \(\theta\).
 The probability of detecting eDNA within a sample given DNA is present within the sample is \(p\). 
-The probabitly of not detecting eDNA within a sample give mutiple samples \(K\) may be written as \(1 - (1 -p)^K\).
+The probability of not detecting eDNA within a sample give multiple samples \(K\) may be written as \(1 - (1 -p)^K\).
 This calculation for non-detecting eDNA is broken down into two parts.
-First, the probabtily of not detecting eDNA because it truely is not in the sample needs to be calculated, which is \(1-\theta\), for a given sample.
-Second, the probabitliy of missing eDNA even though the eDNA is present within the sample needs to be calculated as well: \(\theta (1 -p)^K\).
+First, the probability of not detecting eDNA because it truly is not in the sample needs to be calculated, which is \(1-\theta\), for a given sample.
+Second, the probability of missing eDNA even though the eDNA is present within the sample needs to be calculated as well: \(\theta (1 -p)^K\).
 
 For the case where only 1 sample is take (i.e., \(J =1 \)), the probability of not detecting eDNA in any sample of subsample may be written: 
 
@@ -48,7 +49,7 @@ The observation and detection probabilities are based upon "rough" analysis from
 
 The first analysis we run estimates the probability of detecting a species at site. This does not allow us to distinguish different densities. Rather it simply informs if a species is present at a site.
 
-We first write a function that estimates the probability of detecting a species assuming different numbers of samples, `J`; probabilities of samples containing DNA, `theta`; different numbers of assay replicates, `K`; and different detection probabilities for the assay, `pDetection` (we choose to use `pDetection` rather than `p` to have a variable that was easier to find in our code). We derived this relationship in a previous section of the document. We aslo define two helper functions, `E(p,k)`, and `combo`.
+We first write a function that estimates the probability of detecting a species assuming different numbers of samples, `J`; probabilities of samples containing DNA, `theta`; different numbers of assay replicates, `K`; and different detection probabilities for the assay, `pDetection` (we choose to use `pDetection` rather than `p` to have a variable that was easier to find in our code). We derived this relationship in a previous section of the document. We also define two helper functions, `E(p,k)`, and `combo`.
 
 ```{r occ_model, echo=TRUE}
 comb = function(n, r){ factorial(n)/(factorial(r) * factorial(n -r ))}
