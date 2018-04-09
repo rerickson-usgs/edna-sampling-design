@@ -15,4 +15,4 @@ when_to_transfer_output	= ON_EXIT_OR_EVICT
 #when_to_transfer_output = ALWAYS
 accounting_group = group_AEH
 accounting_group_user =raerickson
-queue 800
+queue 1008
