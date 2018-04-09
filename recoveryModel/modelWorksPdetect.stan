@@ -1,15 +1,15 @@
 data {
-  int<lower = 0> nObs; # number of observations 
-  int<lower = 0> nPsi; # number of sites
-  int<lower = 0> nTheta; # number of samples
-  int<lower = 0> nPdetect; # number of detection probs
-  int<lower = 0> Y[nObs]; # Replicate level detections per visit
-  int<lower = 0> Z[nObs]; # site level detection 
-  int<lower = 0> A[nObs]; # sample level detection 
-  int<lower = 0> psiID[nObs]; # dummy variable for psi
-  int<lower = 0> thetaID[nObs]; # dummy variable for theta
-  int<lower = 0> pID[nObs]; # dummy variable for p
-  int<lower = 0> K; # Number of PCR replicates 
+  int<lower = 0> nObs; // number of observations 
+  int<lower = 0> nPsi; // number of sites
+  int<lower = 0> nTheta; // number of samples
+  int<lower = 0> nPdetect; // number of detection probs
+  int<lower = 0> Y[nObs]; // Replicate level detections per visit
+  int<lower = 0> Z[nObs]; // site level detection 
+  int<lower = 0> A[nObs]; // sample level detection 
+  int<lower = 0> psiID[nObs]; // dummy variable for psi
+  int<lower = 0> thetaID[nObs]; // dummy variable for theta
+  int<lower = 0> pID[nObs]; // dummy variable for p
+  int<lower = 0> K; // Number of PCR replicates 
 }
 parameters {
   vector[nPdetect] muPdetect;
@@ -42,15 +42,15 @@ model {
   
   // likelihood
   for (d in 1:nObs) {
-    if (Z[d] > 0){ # Has DNA been found at the site?
-      if (A[d] > 0) { # Has DNA been detected within a sample?
-	target += # Yes, DNA is in both site and sample 
+    if (Z[d] > 0){ // Has DNA been found at the site?
+      if (A[d] > 0) { // Has DNA been detected within a sample?
+	target += // Yes, DNA is in both site and sample 
 	  log_inv_muPpsi[psiID[d]] +
 	  log_inv_muPtheta[thetaID[d]] + 
 	  binomial_logit_lpmf( Y[d] | K,
 			       muPdetect[pID[d]] );
       } else {
-	target += log_sum_exp( # Yes DNA is a the site, but not within sample
+	target += log_sum_exp( // Yes DNA is a the site, but not within sample
 			      log_inv_muPpsi[psiID[d]] +
 			      log_inv_muPtheta[thetaID[d]] + 
 			      binomial_logit_lpmf(Y[d] | K,
@@ -59,7 +59,7 @@ model {
       }	  
     } else {
       target += log_sum_exp(
-			    log_sum_exp( # No DNA at the site nor within sample
+			    log_sum_exp( // No DNA at the site nor within sample
 					log_inv_muPpsi[psiID[d]] +
 					log_inv_muPtheta[thetaID[d]] + 
 					binomial_logit_lpmf(Y[d] | K,

@@ -5,7 +5,7 @@ library(data.table)
 ## + 1 needed because condor lives in 0 index work but R lives in 
 condorIndex <- as.numeric(commandArgs(trailingOnly = TRUE)) + 1
 
-## Read in parameter values data
+## Read in parameter values
 parameterValue <- fread("./parmaterValue.csv")
 
 ## Number of datasets to simulate
@@ -37,7 +37,7 @@ for(sim in 1:nSims){
     YobsName <- paste0("Y_", sim)
     
     ## Simulated "known" Zs and As to generate observed Ys
-    Zsim <- rep(psi, nSamples)
+    Zsim <- rep( psi, nSamples)
     Asim <- rbinom( n = nSamples, size = 1, prob = theta * Zsim) 
     Yobs <- rbinom( n = nSamples, size = K, prob = p  * Asim)
     
