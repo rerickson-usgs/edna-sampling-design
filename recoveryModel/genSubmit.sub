@@ -2,11 +2,11 @@ universe	= docker
 docker_image	= rerickson/r-stan
 executable	= ./eDNAsimulate.sh
 arguments = $(Process)
-transfer_input_files	= simulateData.R, parmaterValue.csv, 
+transfer_input_files	= simulateData.R, parmaterValue.csv
 log	= output/log$(Process).txt
 error	= output/err$(Process).txt
 output	= output/out$(Process).txt
-requirements = ((Machine != "igsarfebaskoi00") && (Machine != "igsarfebaskoi01") && (Machine != "igsarfebaskoi02") && (Machine != "igsarfebaskoi04") && (Machine != "igsarfebaskoi05") && (Machine != "igsarfebaskoi06"))
+requirements = ((Machine != "igsarfebaskoi00") && (Machine != "igsarfebaskoi01") && (Machine != "igsarfebaskoi02") && (Machine != "igsarfebaskoi05") && (Machine != "igsarfebaskoi06") && (Machine != "igsarfebaskoi04.er.usgs.gov") &&  (Machine != "igsarfebaskoi07")  &&  (Machine != "igsarfebaskoi08"))
 request_memory = 0.5GB
 transfer_output_files   = simulatedData.csv
 transfer_output_remaps  = "simulatedData.csv = ./simulatedDataSets/simulatedData$(Process).csv"
