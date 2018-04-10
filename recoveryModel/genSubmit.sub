@@ -6,7 +6,7 @@ transfer_input_files	= simulateData.R, parmaterValue.csv,
 log	= output/log$(Process).txt
 error	= output/err$(Process).txt
 output	= output/out$(Process).txt
-requirements = OpSys == "LINUX"
+requirements = ((Machine != "igsarfebaskoi00") && (Machine != "igsarfebaskoi01") && (Machine != "igsarfebaskoi02") && (Machine != "igsarfebaskoi04") && (Machine != "igsarfebaskoi05") && (Machine != "igsarfebaskoi06"))
 request_memory = 0.5GB
 transfer_output_files   = simulatedData.csv
 transfer_output_remaps  = "simulatedData.csv = ./simulatedDataSets/simulatedData$(Process).csv"
