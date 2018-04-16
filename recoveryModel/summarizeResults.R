@@ -19,7 +19,7 @@ ggplot(allData, aes(x = pRecoveredSE)) + geom_histogram() +
     theme_minimal() + ylab("Count") + xlab("Recovered se for p")
     
 
-ggplot(allData, aes(x = pRecoveredSE)) + geom_histogram() + xlim(c(0, 0.025))
+ggplot(allData, aes(x = pRecoveredSE)) + geom_histogram() 
 
 
 ## Readin, create factors, and merge in parameter Values
@@ -78,7 +78,7 @@ ggDetect <- ggplot(data = dND, aes(color = K2,
                                    shape = K2,
                                    y = detectPer,
                                    x = factor(nSamples),  group = p2)) +
-    geom_point(position = position_dodge(width = 0.80)) + 
+    geom_point(position = position_dodge(width = 0.80)) +
     facet_grid( p2 ~  theta2 ) +
     scale_color_manual("Molecular\nreplicates",
                        values = c("red", "blue", "black", "seagreen", "orange")) +
@@ -159,9 +159,9 @@ print(ggP)
 ggsave(filename = "ggP.pdf", ggP, width = 11, height = 6)
 
 summary(dND)
-dSubSetND <- dND[ p == 0.15 | p == 0.30 | p == 0.40, ][
-    nSamples == 20 | nSamples == 50, ][
-    theta == 0.06 | theta == 0.24 | theta == 0.42, ]
+dSubSetND <- dND[ p <= 0.40 & p > 0.05, ][
+    nSamples == 10 | nSamples == 20 | nSamples == 40 , ][
+    theta <= 0.40, ]
 
 colnames(dSubSetND)
 
@@ -210,10 +210,9 @@ levels(dSubSetND2med$parameter) <- c("Probability\nof detection (p)",
 ## Extract out data for vertical lines 
 
 params[ , unique(nSamples)]
-paramsSubset <- params[ p == 0.15 | p == 0.30 | p == 0.40, ][
-    nSamples == 20 | nSamples == 50, ][
-    theta == 0.06 | theta == 0.24 | theta == 0.42, ][
-    K2 == "K =  16", list(theta, p, psi, theta2, p2, psi2)]
+paramsSubset <- params[ p <= 0.40 & p > 0.05, ][
+    nSamples == 10 | nSamples == 20 | nSamples == 40 , ][
+    theta <= 0.40, ][ K2 == "K =  16", .(theta, p, psi, theta2, p2, psi2)]
 
 
 paramsSubset

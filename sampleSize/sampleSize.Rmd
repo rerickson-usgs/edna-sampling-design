@@ -3,7 +3,6 @@ title: "Probabilility of detections and sample occurance"
 author: "Richard A. Erickson, Chris M. Merkes, and Erica L. Mize"
 date: "null"
 output:
-  html_document: default
   pdf_document: default
 fig_caption: yes
 ---
@@ -43,7 +42,7 @@ In turn, this generalizes to be
 
 ## Data source and parameter values
 
-The observation and detection probabilities are based upon "rough" analysis from USGS eDNA samples in Pools 17 and 19. These samples were taken during June, which should be a period with low detentions based upon the biology and seasonal movement of the fish. The lowest observed occurrence probabilities were 0.06 and the highest was 0.42. These values are used for the basis of a sample containing DNA. The probabilities of detecting DNA within a sample ranged from 0.3 to 0.4. These values are used for the basis of detecting DNA using an assay for a given sample.
+The observation and detection probabilities are based upon ranges found in the literature and described in our corresponding manuscript.
 
 ## Probability of detecting a species (Occupuancy only)
 
@@ -70,15 +69,15 @@ sampleDetectionOne <- function(
 
 
 
-Next, we explore different sample numbers, \(J \in 1, 2, \ldots 100\); different assay detection probabilities, \(\theta \in \{0.06, 0.24, 0.42, 0.75\}\); different sample detection probabilities, \(p \in \{0.3, 0.35, 0.4, 0.75\}\); and different numbers of molecular replicates \(K \in \{2, 3, 4, 8, 16\}\).
+Next, we explore different sample numbers, \(J \in 1, 2, \ldots 120\); different assay detection probabilities, \(\theta \in \{0.05, 0.1, 0.2, 0.4, 0.8, 1.0\}\); different sample detection probabilities, \(p \in \{0.05, 0.1, 0.2, 0.4, 0.8, 1.0\}\); and different numbers of molecular replicates \(K \in \{2, 4, 8, 16\}\).
 
 We use the `data.table` package for storing and manipulating my data.
 
 ```{r occ_model_run, echo = TRUE, results = 'hide'}
 library(data.table)
-results <- data.table(expand.grid(J = 1:100,
-							theta = c(0.06, 0.24, 0.42, 0.75), 
-							pDetection = c(0.3, 0.35, 0.4, 0.75),
+results <- data.table(expand.grid(J = 1:120,
+							theta = c(0.05, 0.1, 0.2, 0.4, 0.8, 1.0), 
+							pDetection = c(0.05, 0.1, 0.2, 0.4, 0.8, 1.0),
 							K = c(2, 3, 4, 8, 16)))
 
 for(index in 1:nrow(results)){
@@ -104,13 +103,16 @@ detectOne <- ggplot(data = results, aes(x = J, y = ProbDetect, color = KPlot)) +
 	geom_line() +
 	facet_grid( pDetectionPlot ~ thetaPlot) +
 	theme_minimal() +
+  
 	ylab("Probabiltiy of detecting species at site") +
 	xlab("Number of samples per site") +
   scale_color_manual("Molecular\nreplicates",
-                     values = c("red", "blue", "black", "seagreen", "orange"))
+                     values = c("red", "blue", "black", "seagreen", "orange", "grey50")) +
+  scale_x_continuous(breaks = seq(0,125, by = 30)) +
+  theme(axis.text.x = element_text(angle = -90, hjust = 0))
 print(detectOne)
-ggsave(filename = "detectingOne.pdf", detectOne, width = 6, height = 4)
-ggsave(filename = "detectingOne.jpg", detectOne, width = 6, height = 4)
+ggsave(filename = "detectingOne.pdf", detectOne, width = 12, height = 4)
+ggsave(filename = "detectingOne.jpg", detectOne, width = 12, height = 4)
 ```
 
 
@@ -119,7 +121,7 @@ ggsave(filename = "detectingOne.jpg", detectOne, width = 6, height = 4)
 
 A more interesting question than simply detecting species at a site using eDNA is "Can eDNA detect different levels of sample occurrence at sites?". To do this, we conduct a simulation study.
 
-First, we draw samples \(J\) from a site with the probability \(\theta\) of any sample containing DNA from a Bernoulli distribution \(\text{Bernoulli}(J, \theta)\) (Note that is a special case of the binomial distribution with size = 1.). Next, we re-sample the positive samples with \(K\) assay replicates with the probability \(p\) that an assay detects DNA from a Binomial distribution \(\text{Binomail}(K, p)\).
+First, we draw samples \(J\) from a site with the probability \(\theta\) of any sample containing DNA from a Bernoulli distribution \(\text{Bernoulli}(J, \theta)\) (Note that is a special case of the binomial distribution with size = 1.). Next, we re-sample the positive samples with \(K\) assay replicates with the probability \(p\) that an assay detects DNA from a Binomial distribution \(\text{Binomial}(K, p)\).
 
 ```{r occProb, echo = TRUE}
 samplesDetect <- function(
@@ -166,14 +168,14 @@ samplesDetect <- function(
 	}
 ```
 
-Next, we explore different sample numbers, \(n \in \{20, 50, 100\}\); different assay detection probabilities, \(p \in \{0.15, 0.3, 0.35, 0.4, 0.75\}\); and different sample detection probabilities, \(\theta \in \{0.06, 0.24, 0.42, 0.76\}\) by running 4,000 simulations.
+Next, we explore different sample numbers, \(n \in \{5, 10, 20, 40, 80, 120\}\); different assay detection probabilities, \(p \in \{0.05, 0.1, 0.2, 0.4, 0.8, 1.0\}\); and different sample detection probabilities, \(\theta \in \{0.05, 0.1, 0.2, 0.4, 0.8, 1.0\}\) by running 4,000 simulations.
 
 ```{r occProbSim, echo = TRUE, results='hide'}
 sampleResults <- samplesDetect(nSims = 4000,
-                               theta = c(0.06, 0.24, 0.42, 0.76),
-                               pDetection = c(0.15, 0.3, 0.35, 0.4, 0.75),
-                               J = c(5, 20, 50, 100),
-                               K = c(2, 3, 4, 8, 16))
+                               theta = c(0.05, 0.1, 0.2, 0.4, 0.8, 1.0),
+                               pDetection = c(0.05, 0.1, 0.2, 0.4, 0.8, 1.0),
+                               J = c(5, 10, 20, 40, 80, 120),
+                               K = c(2, 4, 8, 16))
 ```
 
 Last, we plot the results using `ggplot2`
@@ -186,10 +188,10 @@ compareSites <- ggplot(sampleResults, aes(x = KPlot2, y = pPositive, fill = thet
 	                     "Total number of simulated samples"))) +
   xlab("Number of molecular replicates") +
   scale_fill_manual(expression("Generating "*theta),
-                    values = c("red", "blue", "black", "seagreen", "orange"))
+                    values = c("red", "blue", "black", "seagreen", "orange", "grey50"))
 print(compareSites)
-ggsave(filename = "compareSites.pdf", compareSites, width = 11, height = 6)
-ggsave(filename = "compareSites.jpg", compareSites, width = 11, height = 6)
+ggsave(filename = "compareSites.pdf", compareSites, width = 12, height = 6)
+ggsave(filename = "compareSites.jpg", compareSites, width = 12, height = 6)
 ```
 
 
