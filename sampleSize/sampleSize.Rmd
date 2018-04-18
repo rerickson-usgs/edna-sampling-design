@@ -78,7 +78,7 @@ library(data.table)
 results <- data.table(expand.grid(J = 1:120,
 							theta = c(0.05, 0.1, 0.2, 0.4, 0.8, 1.0), 
 							pDetection = c(0.05, 0.1, 0.2, 0.4, 0.8, 1.0),
-							K = c(2, 3, 4, 8, 16)))
+							K = c(2, 4, 8, 16)))
 
 for(index in 1:nrow(results)){
   results[ index, ProbDetect :=

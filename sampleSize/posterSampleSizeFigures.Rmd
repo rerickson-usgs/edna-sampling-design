@@ -39,8 +39,8 @@ sampleDetectionOne <- function(
 ```{r occ_model_run, echo = TRUE, results = 'hide'}
 library(data.table)
 results <- data.table(expand.grid(J = 1:100,
-							theta = c(0.06, 0.24, 0.42, 0.75), 
-							pDetection = c(0.3, 0.35, 0.4, 0.75),
+							theta = c(0.05, 0.1, 0.2, 0.4, 0.8, 1.0), 
+							pDetection = c(0.05, 0.1, 0.2, 0.4, 0.8, 1.0),
 							K = c(2, 3, 4, 8, 16)))
 
 for(index in 1:nrow(results)){
@@ -60,13 +60,14 @@ results[ , KPlot := factor(KPlot,
                              order(as.numeric(gsub("K = ", "",
                                                    levels(results$KPlot))))])]
 
-detectOne <- ggplot(data = results[ theta == 0.06 & pDetection == 0.3,], aes(x = J, y = ProbDetect, color = KPlot)) +
+detectOne <- ggplot(data = results[ theta == 0.05 & pDetection == 0.2,], 
+                    aes(x = J, y = ProbDetect, color = KPlot)) +
 	geom_line() +
 	theme_minimal() +
 	ylab("Probabiltiy of detecting species at site") +
 	xlab("Number of samples per site") +
   scale_color_manual("Molecular\nreplicates",
-                     values = c("red", "blue", "black", "seagreen", "orange"))
+                     values = c("red", "blue", "black", "seagreen", "orange", "grey50"))
 print(detectOne)
 ggsave(filename = "detectingOneP3T06.pdf", detectOne, width = 6, height = 4)
 ggsave(filename = "detectingOneP3T06.jpg", detectOne, width = 6, height = 4)
@@ -119,10 +120,10 @@ samplesDetect <- function(
 }
 
 sampleResults <- samplesDetect(nSims = 4000,
-                               theta = c(0.06, 0.24, 0.42, 0.76),
-                               pDetection = c(0.15, 0.75),
-                               J = c(5, 100),
-                               K = c(2, 3, 4, 8, 16))
+                               theta = c(0.05, 0.1, 0.2, 0.4, 0.8, 1.0),
+                               pDetection = c(0.05, 0.1, 0.2, 0.4, 0.8, 1.0),
+                               J = c(5, 10, 20, 40, 80, 120),
+                               K = c(2, 4, 8, 16))
 
 
 compareSites <- ggplot(sampleResults, aes(x = KPlot2, y = pPositive, fill = thetaPlot)) +
@@ -133,7 +134,7 @@ compareSites <- ggplot(sampleResults, aes(x = KPlot2, y = pPositive, fill = thet
 	                     "Total number of simulated samples"))) +
   xlab("Number of molecular replicates") +
   scale_fill_manual(expression("Generating "*theta),
-                    values = c("red", "blue", "black", "seagreen", "orange"))
+                    values = c("red", "blue", "black", "seagreen", "orange", "grey50"))
 print(compareSites)
 ggsave(filename = "compareSitesPoster.pdf", compareSites, width = 6, height = 4)
 ggsave(filename = "compareSitesPoster.jpg", compareSites, width = 6, height = 4)

@@ -114,6 +114,9 @@ print(ggTheta)
 
 ggsave(filename = "ggTheta.pdf", ggTheta, width = 11, height = 6)
 
+dND[ theta <= 0.05, ][ p > .8 | p < 0.1, ][ nSamples < 10, .(K, p, nSamples, psiL80, psiMed, psiU80)]
+
+
 ggPsi <- ggplot(data = dND, aes(color = K2,
                                 shape = K2,
                                 x= factor(nSamples),
@@ -134,6 +137,8 @@ ggPsi <- ggplot(data = dND, aes(color = K2,
     coord_cartesian(ylim = c(0,1))
 
 print(ggPsi)
+
+
 ggsave(filename = "ggPsi.pdf", ggPsi, width = 11, height = 6)
 
 
@@ -254,6 +259,10 @@ ggPlotSubSet <- ggplot(data = dSubSetND2med, aes(x = factor(nSamples),
 print(ggPlotSubSet)
 
 ggsave(filename = "resultsSubSet.pdf",
+       plot = ggPlotSubSet,
+       width = 10, height = 6)
+
+ggsave(filename = "resultsSubSet.jpg",
        plot = ggPlotSubSet,
        width = 10, height = 6)
 
