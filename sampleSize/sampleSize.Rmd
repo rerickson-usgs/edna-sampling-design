@@ -101,9 +101,8 @@ results[ , KPlot := factor(KPlot,
 
 detectOne <- ggplot(data = results, aes(x = J, y = ProbDetect, color = KPlot)) +
 	geom_line() +
-	facet_grid( pDetectionPlot ~ thetaPlot) +
+	facet_grid( pDetectionPlot ~ theta, labeller = label_bquote(cols = theta == .(theta))) +
 	theme_minimal() +
-  
 	ylab("Probabiltiy of detecting species at site") +
 	xlab("Number of samples per site") +
   scale_color_manual("Molecular\nreplicates",
@@ -180,16 +179,21 @@ sampleResults <- samplesDetect(nSims = 4000,
 
 Last, we plot the results using `ggplot2`
 ```{r occProbSimPlot, echo = TRUE, fig.cap="Proportion of samples per site (Sample occurance) that are positive based upon sample size and the assay's probability of detection."}
+
+df= data.frame(x = 1:2, y = 1:2)
+
 compareSites <- ggplot(sampleResults, aes(x = KPlot2, y = pPositive, fill = thetaPlot)) +
 	geom_boxplot(outlier.size = 0.5) +
 	facet_grid(  Samples ~  pDetectionPlot ) +
   theme_minimal() +
-	ylab(expression(over("Number of simulated positive samples",
-	                     "Total number of simulated samples"))) +
+	ylab(expression("Simulated "*theta~bgroup("(", over("Number of simulated positive samples",
+	                     "Total number of simulated samples"), ")"))) +
   xlab("Number of molecular replicates") +
   scale_fill_manual(expression("Generating "*theta),
                     values = c("red", "blue", "black", "seagreen", "orange", "grey50"))
 print(compareSites)
+
+
 ggsave(filename = "compareSites.pdf", compareSites, width = 12, height = 6)
 ggsave(filename = "compareSites.jpg", compareSites, width = 12, height = 6)
 ```

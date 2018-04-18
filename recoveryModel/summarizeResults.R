@@ -235,7 +235,23 @@ levels(parSubMelt$parameter) <- c("Probability\nof detection (p)",
 
 
 
+dSubSetND2med[ , theta3 := theta]
+dSubSetND2med[ , p3 := p]
 
+parSubMelt[ , p3 := as.numeric(gsub("p = ", "", p2)), ]
+parSubMelt[ , theta3 := as.numeric(gsub("theta = ", "", theta2)), ]
+parSubMelt[ , psi3 := as.numeric(gsub("psi = ", "", psi2)), ]
+
+parSubMelt2 <- parSubMelt[ p3 == yInt | psi3 == yInt | theta3 == yInt,]
+
+parSubMelt2[ , greekPar := gsub("Probability\nof detection |\\(|\\)|Sample occurance\nprobability |Site occurance\nprobability ", "", parameter)]
+dSubSetND2med[ , greekPar := gsub("Probability\nof detection |\\(|\\)|Sample occurance\nprobability |Site occurance\nprobability ", "", parameter)]
+
+
+levels(parSubMelt2$parameter) <- c("Detection probability", "Collection probability", "Site occupancy")
+levels(dSubSetND2med$parameter) <- c("Detection probability", "Collection probability", "Site occupancy")
+
+parSubMelt2
 
 ggPlotSubSet <- ggplot(data = dSubSetND2med, aes(x = factor(nSamples),
                                                  y = median,
@@ -246,14 +262,16 @@ ggPlotSubSet <- ggplot(data = dSubSetND2med, aes(x = factor(nSamples),
                                                  group = K2)) +
     geom_linerange(position = position_dodge(width = 0.80)) +
     geom_point(position = position_dodge(width = 0.80)) +
-    facet_grid( parameter ~ p2 + theta2, scale = "free_y") +
+    facet_grid( parameter + greekPar ~ p3 + theta3, scale = "free_y", 
+    			labeller = label_bquote(cols = atop(theta == .(theta3), p == .(p3)),
+    									rows = atop(.(as.character(parameter)), "("*.(as.symbol(greekPar))*")" )))  +
     scale_color_manual("Molecular\nreplicates",
                        values = c("red", "blue", "black" , "seagreen", "orange")) +
     scale_shape_manual("Molecular\nreplicates", values = 15:19) +
     theme_minimal() +
     ylab("Recovered parameter value") +
     xlab("Number of samples per site (J)") +
-    geom_hline(data = parSubMelt, aes(yintercept = yInt)) +
+    geom_hline(data = parSubMelt2, aes(yintercept = yInt)) +
     coord_cartesian(ylim = c(0,1))
 
 print(ggPlotSubSet)
