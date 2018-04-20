@@ -104,14 +104,16 @@ detectOne <- ggplot(data = results, aes(x = J, y = ProbDetect, color = KPlot)) +
 	facet_grid( pDetectionPlot ~ theta, labeller = label_bquote(cols = theta == .(theta))) +
 	theme_minimal() +
 	ylab("Probabiltiy of detecting species at site") +
-	xlab("Number of samples per site") +
+	xlab("Number of samples per site (J)") +
   scale_color_manual("Molecular\nreplicates",
                      values = c("red", "blue", "black", "seagreen", "orange", "grey50")) +
   scale_x_continuous(breaks = seq(0,125, by = 30)) +
-  theme(axis.text.x = element_text(angle = -90, hjust = 0))
+  scale_y_continuous(breaks = seq(0,1, by = .5)) +
+  theme(axis.text.x = element_text(angle = -90, hjust = 0),
+        panel.spacing = unit(1, "lines"))
 print(detectOne)
-ggsave(filename = "detectingOne.pdf", detectOne, width = 12, height = 4)
-ggsave(filename = "detectingOne.jpg", detectOne, width = 12, height = 4)
+ggsave(filename = "detectingOne.pdf", detectOne, width = 12, height = 6)
+ggsave(filename = "detectingOne.jpg", detectOne, width = 12, height = 6)
 ```
 
 
@@ -182,14 +184,14 @@ Last, we plot the results using `ggplot2`
 
 df= data.frame(x = 1:2, y = 1:2)
 
-compareSites <- ggplot(sampleResults, aes(x = KPlot2, y = pPositive, fill = thetaPlot)) +
+compareSites <- ggplot(sampleResults, aes(x = KPlot2, y = pPositive, color = thetaPlot)) +
 	geom_boxplot(outlier.size = 0.5) +
 	facet_grid(  Samples ~  pDetectionPlot ) +
   theme_minimal() +
 	ylab(expression("Simulated "*theta~bgroup("(", over("Number of simulated positive samples",
 	                     "Total number of simulated samples"), ")"))) +
-  xlab("Number of molecular replicates") +
-  scale_fill_manual(expression("Generating "*theta),
+  xlab("Number of molecular replicates (K)") +
+  scale_color_manual(expression("Generating "*theta),
                     values = c("red", "blue", "black", "seagreen", "orange", "grey50"))
 print(compareSites)
 

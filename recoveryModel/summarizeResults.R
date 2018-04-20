@@ -248,8 +248,8 @@ parSubMelt2[ , greekPar := gsub("Probability\nof detection |\\(|\\)|Sample occur
 dSubSetND2med[ , greekPar := gsub("Probability\nof detection |\\(|\\)|Sample occurance\nprobability |Site occurance\nprobability ", "", parameter)]
 
 
-levels(parSubMelt2$parameter) <- c("Detection probability", "Collection probability", "Site occupancy")
-levels(dSubSetND2med$parameter) <- c("Detection probability", "Collection probability", "Site occupancy")
+levels(parSubMelt2$parameter) <- c("Detection probability", "Capture probability", "Site occupancy")
+levels(dSubSetND2med$parameter) <- c("Detection probability", "Capture probability", "Site occupancy")
 
 parSubMelt2
 
