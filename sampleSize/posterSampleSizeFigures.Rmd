@@ -41,7 +41,7 @@ library(data.table)
 results <- data.table(expand.grid(J = 1:100,
 							theta = c(0.05, 0.1, 0.2, 0.4, 0.8, 1.0), 
 							pDetection = c(0.05, 0.1, 0.2, 0.4, 0.8, 1.0),
-							K = c(2, 3, 4, 8, 16)))
+							K = c(2, 4, 8, 16)))
 
 for(index in 1:nrow(results)){
   results[ index, ProbDetect :=
@@ -60,7 +60,7 @@ results[ , KPlot := factor(KPlot,
                              order(as.numeric(gsub("K = ", "",
                                                    levels(results$KPlot))))])]
 
-detectOne <- ggplot(data = results[ theta == 0.05 & pDetection == 0.2,], 
+detectOne <- ggplot(data = results[ theta == 0.1 & pDetection == 0.1,], 
                     aes(x = J, y = ProbDetect, color = KPlot)) +
 	geom_line() +
 	theme_minimal() +
@@ -72,16 +72,29 @@ print(detectOne)
 ggsave(filename = "detectingOneP3T06.pdf", detectOne, width = 6, height = 4)
 ggsave(filename = "detectingOneP3T06.jpg", detectOne, width = 6, height = 4)
 
+
+detectOneB <- ggplot(data = results[ theta == 0.05 & pDetection == 0.2,], 
+                    aes(x = J, y = ProbDetect, color = KPlot)) +
+	geom_line() +
+	theme_minimal() +
+	ylab("Probabiltiy of detecting species at site") +
+	xlab("Number of samples per site") +
+  scale_color_manual("Molecular\nreplicates",
+                     values = c("red", "blue", "black", "seagreen", "orange", "grey50"))
+print(detectOneB)
+ggsave(filename = "detectingOneP3T06_B.pdf", detectOneB, width = 6, height = 4)
+ggsave(filename = "detectingOneP3T06_B.jpg", detectOneB, width = 6, height = 4)
+
 ```
 
 
 ```{r occProb, echo = TRUE}
 samplesDetect <- function(
 	nSims = 2,
-	J = c(10, 100),
-	theta = c(0.06, 0.42),
-	K = 8,
-	pDetection = c(0.3, 0.4)){
+	J = c(5, 120),
+	theta = c(0.05, 0.2, 0.8),
+	K = c(2,4,8,16),
+	pDetection = c(0.1, 0.8)){
 		results <- data.table(expand.grid(simulation = 1:nSims,
 					   J = J, theta = theta,
 					   K = K, pDetection = pDetection))
@@ -119,22 +132,19 @@ samplesDetect <- function(
 	return(results)
 }
 
-sampleResults <- samplesDetect(nSims = 4000,
-                               theta = c(0.05, 0.1, 0.2, 0.4, 0.8, 1.0),
-                               pDetection = c(0.05, 0.1, 0.2, 0.4, 0.8, 1.0),
-                               J = c(5, 10, 20, 40, 80, 120),
-                               K = c(2, 4, 8, 16))
+sampleResults <- samplesDetect(nSims = 4000)
 
 
-compareSites <- ggplot(sampleResults, aes(x = KPlot2, y = pPositive, fill = thetaPlot)) +
+compareSites <- ggplot(sampleResults, aes(x = KPlot2, y = pPositive, color = thetaPlot)) +
+  geom_hline(aes(yintercept = theta, color = thetaPlot)) +
 	geom_boxplot(outlier.size = 0.5) +
 	facet_grid(  Samples ~  pDetectionPlot ) +
   theme_minimal() +
 	ylab(expression(over("Number of simulated positive samples",
 	                     "Total number of simulated samples"))) +
   xlab("Number of molecular replicates") +
-  scale_fill_manual(expression("Generating "*theta),
-                    values = c("red", "blue", "black", "seagreen", "orange", "grey50"))
+  scale_color_manual(expression("Generating "*theta),
+                    values = c("red", "blue", "black", "seagreen", "orange", "grey50")) 
 print(compareSites)
 ggsave(filename = "compareSitesPoster.pdf", compareSites, width = 6, height = 4)
 ggsave(filename = "compareSitesPoster.jpg", compareSites, width = 6, height = 4)
